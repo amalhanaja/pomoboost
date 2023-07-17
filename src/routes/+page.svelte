@@ -2,10 +2,19 @@
 	import SettingsDialog from '$lib/components/Dialog/SettingsDialog.svelte';
 	import NavBar from '$lib/components/NavBar.svelte';
 	import PomoTimer from '$lib/components/PomoTimer/PomoTimer.svelte';
-	import { Impl } from '$lib/data/TimerSettingsRepository';
-	import { DefaultTimerSettings } from '$lib/models/TimerSettingsModel';
+	import { PomoTimerRepositoryImpl } from '$lib/data/PomoTimerRepository';
+	import { PomodoroCountRepositoryImpl } from '$lib/data/PomodoroCountRepository';
+	import { TimerSettingsRepositoryImpl } from '$lib/data/TimerSettingsRepository';
+	import pomoTimerStore from '$lib/stores/pomoTimer';
+	import pomodoroCountStore from '$lib/stores/pomodoroCount';
 	import timerSettingsStore from '$lib/stores/timerSettings';
-	const timerSettings = timerSettingsStore(DefaultTimerSettings, new Impl());
+
+	const timerSettingsRepository = new TimerSettingsRepositoryImpl();
+	const pomoTimerRepository = new PomoTimerRepositoryImpl();
+	const pomodoroCountRepository = new PomodoroCountRepositoryImpl();
+	const timerSettings = timerSettingsStore(timerSettingsRepository);
+	const pomoTimer = pomoTimerStore(timerSettingsRepository, pomoTimerRepository);
+	const pomodoroCount = pomodoroCountStore(pomodoroCountRepository);
 	$: settingsOpen = false;
 </script>
 
@@ -14,7 +23,7 @@
 	<NavBar onSettingClick={() => (settingsOpen = true)} />
 </header>
 <main>
-	<PomoTimer />
+	<PomoTimer pomoTimerStore={pomoTimer} settings={$timerSettings} pomodoroCountStore={pomodoroCount}/>
 	<h1 class="text-3xl font-bold underline">
 		Welcome to SvelteKit {$timerSettings?.longBreakDuration}
 	</h1>

@@ -7,7 +7,7 @@
 	export let isRunning: boolean;
 	export let onClickMainControl: () => void;
 	export let onClickReset: () => void;
-	// export let onClickSkip: () => void;
+	export let onClickSkip: () => void;
 </script>
 
 <section class="flex flex-row justify-center gap-x-4">
@@ -21,7 +21,7 @@
 			<IcPlay />
 		{/if}
 	</button>
-	<button class="btn btn-square btn-outline" on:click={onClickReset}>
+	<button class="btn btn-square btn-outline" on:click={onClickSkip}>
 		<IcForwardStep />
 	</button>
 </section>

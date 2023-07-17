@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type TimerSettingsModel from '$lib/models/TimerSettingsModelModel';
+	import type TimerSettingsModel from '$lib/models/TimerSettingsModel';
 	import { derived, type Writable } from 'svelte/store';
 	export let store: Writable<TimerSettingsModel>;
 	const MINUTE_TO_SECOND = 60;

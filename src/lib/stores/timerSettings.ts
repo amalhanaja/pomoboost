@@ -1,17 +1,13 @@
 import type TimerSettingsRepository from '$lib/data/TimerSettingsRepository';
 import type TimerSettingsModel from '$lib/models/TimerSettingsModel';
-import { DefaultTimerSettings } from '$lib/models/TimerSettingsModel';
 import { onMount } from 'svelte';
 import { get, writable, type Writable } from 'svelte/store';
 
-const timerSettingsStore = (
-	defaultValue: TimerSettingsModel = DefaultTimerSettings,
-	repository: TimerSettingsRepository
-): Writable<TimerSettingsModel> => {
+const timerSettingsStore = (repository: TimerSettingsRepository): Writable<TimerSettingsModel> => {
 	const store = writable<TimerSettingsModel>();
 	const { subscribe, set } = store;
 	onMount(() => {
-		const value = repository.getValue(defaultValue);
+		const value = repository.getValue();
 		set(value);
 	});
 	const storeValue = (val: TimerSettingsModel) => {
@@ -21,8 +17,8 @@ const timerSettingsStore = (
 	return {
 		subscribe,
 		set: storeValue,
-		update: (callback) => {
-			const updated = callback(get(store));
+		update: (updater) => {
+			const updated = updater(get(store));
 			storeValue(updated);
 		}
 	};
