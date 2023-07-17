@@ -8,54 +8,74 @@
 	import CountDown from './CountDown.svelte';
 	import TimerActions from './TimerActions.svelte';
 	import TimerTypeTabs from './TimerTypeTabs.svelte';
+	import pingAudio from '$lib/assets/audios/ping.mp3';
+	import alarmClockShortAudio from '$lib/assets/audios/alarm-clock-short.mp3';
 	export let settings: TimerSettingsModel;
 	export let pomoTimerStore: Writable<PomoTimerModel>;
 	export let pomodoroCountStore: Writable<Map<TimerType, number>>;
 	const longBreakInterval = 3;
 	const timerState = writable<TimerState>('STOPPED');
+	let interval: NodeJS.Timer | undefined = undefined;
+
 	const changeTimerType = (timerType: TimerType) => {
 		pomoTimerStore.update((prev) => ({ ...prev, timerType: timerType }));
 	};
-	let interval: NodeJS.Timer | undefined = undefined;
 
 	const onTick = () => {
-		pomoTimerStore.update((prev) => {
-			const updated = prev.seconds - 1;
-			if (updated <= 0) {
-				finish();
-			}
-			return { ...prev, seconds: updated };
-		});
+		const updated = get(pomoTimerStore).seconds - 1;
+		pomoTimerStore.update((prev) => ({ ...prev, seconds: updated }));
+		if (updated <= 0) {
+			finish();
+		}
 	};
+
 	const getNextTimerType = (current: TimerType): TimerType => {
 		const isPomodoro = current === 'POMODORO';
 		const pomodoroCount = get(pomodoroCountStore).get('POMODORO') ?? 0;
 		const shouldTakeLongBreak = pomodoroCount > 0 && pomodoroCount % longBreakInterval === 0;
 		return !isPomodoro ? 'POMODORO' : shouldTakeLongBreak ? 'LONG_BREAK' : 'SHORT_BREAK';
 	};
+
+	const playAudio = (src: string) => {
+		const audio = new Audio(src);
+		audio.loop = false;
+		audio.play();
+	};
+
 	const start = () => {
+		playAudio(pingAudio);
 		timerState.set('RUNNING');
 		interval = setInterval(onTick, 1000);
 	};
+
 	const stop = () => {
 		timerState.set('STOPPED');
 		clearInterval(interval);
 	};
-	const finish = () => {
-		timerState.set('COMPLETED');
-		clearInterval(interval);
-	};
-	const next = () => {
-		const current = get(pomoTimerStore).timerType;
+
+	const updateCount = (current: TimerType) => {
 		pomodoroCountStore.update((prev) => {
 			const count = (prev.get(current) ?? 0) + 1;
-			console.log('Count', count);
 			prev.set(current, count);
 			return prev;
 		});
+	};
+
+	const next = () => {
+		const current = get(pomoTimerStore).timerType;
+		updateCount(current);
 		const nextTimerType = getNextTimerType(current);
+		console.log(nextTimerType);
 		changeTimerType(nextTimerType);
 	};
+
+	const finish = () => {
+		playAudio(alarmClockShortAudio);
+		timerState.set('COMPLETED');
+		clearInterval(interval);
+		next();
+	};
+
 	const onClickMainControl = () => {
 		if ($timerState === 'RUNNING') {
 			stop();
