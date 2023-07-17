@@ -108,15 +108,7 @@
 </script>
 
 <svelte:head>
-	<!-- <title
-		>{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')} – PomoBoost</title
-	> -->
 	<title>{headerTitle}</title>
-	<!-- {#if $timerState === 'RUNNING'}
-		<title>{minutes.toString().padStart(2, '0')}:{secondStr} – PomoBoost</title>
-	{:else}
-		<title>PomoBoost</title>
-	{/if} -->
 </svelte:head>
 <section class="flex flex-col gap-y-8 w-96 m-auto">
 	<TimerTypeTabs selected={$pomoTimerStore?.timerType ?? 'POMODORO'} onSelect={changeTimerType} />
