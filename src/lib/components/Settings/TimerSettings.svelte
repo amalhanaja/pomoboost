@@ -65,9 +65,9 @@
 			/>
 		</div>
 	</section>
-	<div class="form-control">
+	<div class="form-control mt-2">
 		<label class="cursor-pointer label">
-			<span class="label-text">Auto start breaks</span>
+			<span class="font-semibold label-text">Auto start breaks</span>
 			<input
 				type="checkbox"
 				class="toggle toggle-primary"
@@ -83,7 +83,7 @@
 	</div>
 	<div class="form-control">
 		<label class="cursor-pointer label">
-			<span class="label-text">Auto start podomoros</span>
+			<span class="font-semibold label-text">Auto start podomoros</span>
 			<input
 				type="checkbox"
 				class="toggle toggle-primary"
