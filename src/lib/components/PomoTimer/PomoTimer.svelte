@@ -4,7 +4,7 @@
 	import type TimerSettingsModel from '$lib/models/TimerSettingsModel';
 	import type TimerType from '$lib/models/TimerType';
 	import getSettingDuration from '$lib/utils/getSettingDuration';
-	import { get, writable, type Writable } from 'svelte/store';
+	import { get, type Writable } from 'svelte/store';
 	import CountDown from './CountDown.svelte';
 	import TimerActions from './TimerActions.svelte';
 	import TimerTypeTabs from './TimerTypeTabs.svelte';
@@ -13,7 +13,7 @@
 	export let settings: TimerSettingsModel;
 	export let pomoTimerStore: Writable<PomoTimerModel>;
 	export let pomodoroCountStore: Writable<Map<TimerType, number>>;
-	const longBreakInterval = 3;
+	const LONG_BREAK_INTERVAL = 3;
 	let timerState: TimerState = 'STOPPED';
 	$: minutes = Math.floor(($pomoTimerStore?.seconds ?? 0) / 60);
 	$: seconds = ($pomoTimerStore?.seconds ?? 0) - minutes * 60;
@@ -38,7 +38,7 @@
 	const getNextTimerType = (current: TimerType): TimerType => {
 		const isPomodoro = current === 'POMODORO';
 		const pomodoroCount = get(pomodoroCountStore).get('POMODORO') ?? 0;
-		const shouldTakeLongBreak = pomodoroCount > 0 && pomodoroCount % longBreakInterval === 0;
+		const shouldTakeLongBreak = pomodoroCount > 0 && pomodoroCount % LONG_BREAK_INTERVAL === 0;
 		return !isPomodoro ? 'POMODORO' : shouldTakeLongBreak ? 'LONG_BREAK' : 'SHORT_BREAK';
 	};
 
@@ -67,19 +67,28 @@
 		});
 	};
 
-	const next = () => {
+	const next = (): TimerType => {
 		const current = get(pomoTimerStore).timerType;
 		updateCount(current);
 		const nextTimerType = getNextTimerType(current);
-		console.log(nextTimerType);
 		changeTimerType(nextTimerType);
+		return nextTimerType;
 	};
 
 	const finish = () => {
 		playAudio(alarmClockShortAudio);
 		timerState = 'COMPLETED';
 		clearInterval(interval);
-		next();
+		const nextTimerType = next();
+		const isNextRoundPomodoro = nextTimerType === 'POMODORO';
+		console.log(isNextRoundPomodoro, settings.autoStartPomodoros, settings.autoStartBreaks);
+		if (isNextRoundPomodoro && settings.autoStartPomodoros) {
+			start();
+			return;
+		}
+		if (!isNextRoundPomodoro && settings.autoStartBreaks) {
+			start();
+		}
 	};
 
 	const onClickMainControl = () => {
