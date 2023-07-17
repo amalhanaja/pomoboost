@@ -14,7 +14,13 @@
 	export let pomoTimerStore: Writable<PomoTimerModel>;
 	export let pomodoroCountStore: Writable<Map<TimerType, number>>;
 	const longBreakInterval = 3;
-	const timerState = writable<TimerState>('STOPPED');
+	let timerState: TimerState = 'STOPPED';
+	$: minutes = Math.floor(($pomoTimerStore?.seconds ?? 0) / 60);
+	$: seconds = ($pomoTimerStore?.seconds ?? 0) - minutes * 60;
+	$: headerTitle =
+		timerState === 'RUNNING'
+			? `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} – PomoBoost`
+			: 'PomoBoost';
 	let interval: NodeJS.Timer | undefined = undefined;
 
 	const changeTimerType = (timerType: TimerType) => {
@@ -44,12 +50,12 @@
 
 	const start = () => {
 		playAudio(pingAudio);
-		timerState.set('RUNNING');
+		timerState = 'RUNNING';
 		interval = setInterval(onTick, 1000);
 	};
 
 	const stop = () => {
-		timerState.set('STOPPED');
+		timerState = 'STOPPED';
 		clearInterval(interval);
 	};
 
@@ -71,13 +77,13 @@
 
 	const finish = () => {
 		playAudio(alarmClockShortAudio);
-		timerState.set('COMPLETED');
+		timerState = 'COMPLETED';
 		clearInterval(interval);
 		next();
 	};
 
 	const onClickMainControl = () => {
-		if ($timerState === 'RUNNING') {
+		if (timerState === 'RUNNING') {
 			stop();
 			return;
 		}
@@ -101,11 +107,22 @@
 	};
 </script>
 
+<svelte:head>
+	<!-- <title
+		>{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')} – PomoBoost</title
+	> -->
+	<title>{headerTitle}</title>
+	<!-- {#if $timerState === 'RUNNING'}
+		<title>{minutes.toString().padStart(2, '0')}:{secondStr} – PomoBoost</title>
+	{:else}
+		<title>PomoBoost</title>
+	{/if} -->
+</svelte:head>
 <section class="flex flex-col gap-y-8 w-96 m-auto">
 	<TimerTypeTabs selected={$pomoTimerStore?.timerType ?? 'POMODORO'} onSelect={changeTimerType} />
-	<CountDown seconds={$pomoTimerStore?.seconds ?? 0} />
+	<CountDown {seconds} {minutes} />
 	<TimerActions
-		isRunning={$timerState === 'RUNNING'}
+		isRunning={timerState === 'RUNNING'}
 		{onClickMainControl}
 		{onClickReset}
 		{onClickSkip}
