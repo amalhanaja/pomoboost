@@ -5,7 +5,7 @@
 
 <nav class="navbar bg-primary">
 	<div class="text-primary-content flex-1">
-		<a class="btn btn-ghost normal-case text-xl" href="/">daisyUI</a>
+		<a class="btn btn-ghost normal-case text-xl" href="/">PomoBoost</a>
 	</div>
 	<div class="flex-none">
 		<button
