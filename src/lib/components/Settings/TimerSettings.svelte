@@ -22,6 +22,7 @@
 				id="pomodoro-duration"
 				type="number"
 				class="input input-bordered w-full max-w-xs"
+				min="1"
 				value={$pomodoro}
 				on:input={(e) => {
 					update((prev) => ({
@@ -40,6 +41,7 @@
 				type="number"
 				class="input input-bordered w-full max-w-xs"
 				value={$shortBreak}
+				min="1"
 				on:input={(e) => {
 					update((prev) => ({
 						...prev,
@@ -57,6 +59,7 @@
 				type="number"
 				class="input input-bordered w-full max-w-xs"
 				value={$longBreak}
+				min="1"
 				on:input={(e) => {
 					update((prev) => ({
 						...prev,
@@ -104,15 +107,14 @@
 		<label for="" class="font-semibold label-text label">Auto start podomoros</label>
 		<input
 			id="longbreak_interval"
+			min="1"
 			type="number"
 			class="input input-bordered w-24"
 			value={$store?.longBreakInterval ?? DefaultTimerSettings.longBreakInterval}
 			on:change={(e) => {
-				const newInterval = Number(e.target?.value)
-				if (newInterval < 1) return
 				update((prev) => ({
 					...prev,
-					longBreakInterval: newInterval
+					longBreakInterval: Number(e.target?.value)
 				}));
 			}}
 		/>
