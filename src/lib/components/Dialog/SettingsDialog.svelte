@@ -5,9 +5,11 @@
 	import { onMount } from 'svelte';
 	import type SettingCategory from '$lib/models/SettingCategory';
 	import NotificationSettings from '../Settings/NotificationSettings.svelte';
+	import type NotificationSettingsModel from '$lib/models/NotificationSettingsModel';
 
 	export let open: boolean;
-	export let store: Writable<TimerSettingsModel>;
+	export let timerSettingStore: Writable<TimerSettingsModel>;
+	export let notificationSettingStore: Writable<NotificationSettingsModel>;
 	export let onClose: () => void;
 	export let category: SettingCategory = 'TIMER';
 	export let onCategoryChange: (category: SettingCategory) => void;
@@ -38,9 +40,9 @@
 			<button class="tab tab-lg tab-bordered flex-1">Theme</button>
 		</div>
 		{#if category === 'TIMER'}
-			<TimerSettings {store} />
+			<TimerSettings store={timerSettingStore} />
 		{:else if category === 'NOTIFICATION'}
-			<NotificationSettings />
+			<NotificationSettings store={notificationSettingStore} />
 		{/if}
 		<div class="modal-action">
 			<button class="btn" on:click={onClose}>Close</button>

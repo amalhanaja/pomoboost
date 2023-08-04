@@ -1,5 +1,8 @@
 <script lang="ts">
+	import alarmClockShortAudio from '$lib/assets/audios/alarm-clock-short.mp3';
+	import pingAudio from '$lib/assets/audios/ping.mp3';
 	import type TimerState from '$lib/models/CountDownState';
+	import type NotificationSettingsModel from '$lib/models/NotificationSettingsModel';
 	import type PomoTimerModel from '$lib/models/PomoTimerModel';
 	import type TimerSettingsModel from '$lib/models/TimerSettingsModel';
 	import type TimerType from '$lib/models/TimerType';
@@ -8,9 +11,8 @@
 	import CountDown from './CountDown.svelte';
 	import TimerActions from './TimerActions.svelte';
 	import TimerTypeTabs from './TimerTypeTabs.svelte';
-	import pingAudio from '$lib/assets/audios/ping.mp3';
-	import alarmClockShortAudio from '$lib/assets/audios/alarm-clock-short.mp3';
-	export let settings: TimerSettingsModel;
+	export let timerSettings: TimerSettingsModel;
+	export let notificationSettings: NotificationSettingsModel;
 	export let pomoTimerStore: Writable<PomoTimerModel>;
 	export let pomodoroCountStore: Writable<Map<TimerType, number>>;
 	const LONG_BREAK_INTERVAL = 3;
@@ -46,7 +48,7 @@
 	const playAudio = (src: string) => {
 		const audio = new Audio(src);
 		audio.loop = false;
-		audio.volume = 0.4
+		audio.volume = notificationSettings.volume;
 		audio.play();
 	};
 
@@ -83,12 +85,16 @@
 		clearInterval(interval);
 		const nextTimerType = next();
 		const isNextRoundPomodoro = nextTimerType === 'POMODORO';
-		console.log(isNextRoundPomodoro, settings.autoStartPomodoros, settings.autoStartBreaks);
-		if (isNextRoundPomodoro && settings.autoStartPomodoros) {
+		console.log(
+			isNextRoundPomodoro,
+			timerSettings.autoStartPomodoros,
+			timerSettings.autoStartBreaks
+		);
+		if (isNextRoundPomodoro && timerSettings.autoStartPomodoros) {
 			start();
 			return;
 		}
-		if (!isNextRoundPomodoro && settings.autoStartBreaks) {
+		if (!isNextRoundPomodoro && timerSettings.autoStartBreaks) {
 			start();
 		}
 	};
@@ -108,7 +114,7 @@
 		stop();
 		pomoTimerStore.update((prev) => ({
 			...prev,
-			seconds: getSettingDuration(settings, prev.timerType)
+			seconds: getSettingDuration(timerSettings, prev.timerType)
 		}));
 	};
 
