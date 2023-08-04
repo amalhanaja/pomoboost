@@ -46,6 +46,7 @@
 	const playAudio = (src: string) => {
 		const audio = new Audio(src);
 		audio.loop = false;
+		audio.volume = 0.4
 		audio.play();
 	};
 
