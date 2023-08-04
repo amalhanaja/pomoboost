@@ -5,6 +5,7 @@
 	import { PomoTimerRepositoryImpl } from '$lib/data/PomoTimerRepository';
 	import { PomodoroCountRepositoryImpl } from '$lib/data/PomodoroCountRepository';
 	import { TimerSettingsRepositoryImpl } from '$lib/data/TimerSettingsRepository';
+	import type SettingCategory from '$lib/models/SettingCategory';
 	import pomoTimerStore from '$lib/stores/pomoTimer';
 	import pomodoroCountStore from '$lib/stores/pomodoroCount';
 	import timerSettingsStore from '$lib/stores/timerSettings';
@@ -15,10 +16,17 @@
 	const timerSettings = timerSettingsStore(timerSettingsRepository);
 	const pomoTimer = pomoTimerStore(timerSettingsRepository, pomoTimerRepository);
 	const pomodoroCount = pomodoroCountStore(pomodoroCountRepository);
-	$: settingsOpen = false;
+	let settingsOpen = false;
+	let settingCategory: SettingCategory = 'TIMER';
 </script>
 
-<SettingsDialog open={settingsOpen} store={timerSettings} onClose={() => (settingsOpen = false)} />
+<SettingsDialog
+	open={settingsOpen}
+	store={timerSettings}
+	onClose={() => (settingsOpen = false)}
+	category={settingCategory}
+	onCategoryChange={(c) => (settingCategory = c)}
+/>
 <header>
 	<NavBar onSettingClick={() => (settingsOpen = true)} />
 </header>

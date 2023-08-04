@@ -27,7 +27,7 @@
 				on:input={(e) => {
 					update((prev) => ({
 						...prev,
-						pomodoroDuration: Number(e.target?.value) * MINUTE_TO_SECOND
+						pomodoroDuration: Number((e.target)?.value) * MINUTE_TO_SECOND
 					}));
 				}}
 			/>
