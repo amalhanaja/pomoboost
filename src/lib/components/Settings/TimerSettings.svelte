@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type TimerSettingsModel from '$lib/models/TimerSettingsModel';
+	import { DefaultTimerSettings } from '$lib/models/TimerSettingsModel';
 	import { derived, type Writable } from 'svelte/store';
 	export let store: Writable<TimerSettingsModel>;
 	const MINUTE_TO_SECOND = 60;
@@ -10,7 +11,7 @@
 	$: longBreak = derived(store, ($settings) => getMinutes($settings?.longBreakDuration ?? 0));
 </script>
 
-<section>
+<section class="flex flex-col space-y-2">
 	<span class="font-semibold label-text">Time (minutes)</span>
 	<section class="flex gap-3">
 		<div class="form-control w-full max-w-xs">
@@ -66,12 +67,13 @@
 		</div>
 	</section>
 	<div class="form-control mt-2">
-		<label class="cursor-pointer label">
+		<label for="autostart_breaks" class="cursor-pointer label">
 			<span class="font-semibold label-text">Auto start breaks</span>
 			<input
+				id="autostart_breaks"
 				type="checkbox"
 				class="toggle toggle-primary"
-				checked={$store?.autoStartBreaks ?? false}
+				checked={$store?.autoStartBreaks ?? DefaultTimerSettings.autoStartBreaks}
 				on:click={() => {
 					update((prev) => ({
 						...prev,
@@ -82,12 +84,13 @@
 		</label>
 	</div>
 	<div class="form-control">
-		<label class="cursor-pointer label">
+		<label for="autostart_pomodoros" class="cursor-pointer label">
 			<span class="font-semibold label-text">Auto start podomoros</span>
 			<input
+				id="autostart_pomodoros"
 				type="checkbox"
 				class="toggle toggle-primary"
-				checked={$store?.autoStartPomodoros ?? false}
+				checked={$store?.autoStartPomodoros ?? DefaultTimerSettings.autoStartPomodoros}
 				on:click={() => {
 					update((prev) => ({
 						...prev,
@@ -96,5 +99,22 @@
 				}}
 			/>
 		</label>
+	</div>
+	<div class="form-control flex flex-row justify-between">
+		<label for="" class="font-semibold label-text label">Auto start podomoros</label>
+		<input
+			id="longbreak_interval"
+			type="number"
+			class="input input-bordered w-24"
+			value={$store?.longBreakInterval ?? DefaultTimerSettings.longBreakInterval}
+			on:change={(e) => {
+				const newInterval = Number(e.target?.value)
+				if (newInterval < 1) return
+				update((prev) => ({
+					...prev,
+					longBreakInterval: newInterval
+				}));
+			}}
+		/>
 	</div>
 </section>

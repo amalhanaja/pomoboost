@@ -4,6 +4,7 @@ type TimerSettingsModel = {
 	longBreakDuration: number;
 	autoStartPomodoros: boolean;
 	autoStartBreaks: boolean;
+	longBreakInterval: number;
 };
 
 export const DefaultTimerSettings: TimerSettingsModel = {
@@ -11,7 +12,8 @@ export const DefaultTimerSettings: TimerSettingsModel = {
 	shortBreakDuration: 5 * 60,
 	longBreakDuration: 15 * 60,
 	autoStartPomodoros: false,
-	autoStartBreaks: true
+	autoStartBreaks: true,
+	longBreakInterval: 3
 };
 
 export default TimerSettingsModel;
