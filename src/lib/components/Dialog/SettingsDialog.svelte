@@ -15,7 +15,7 @@
 	export let onCategoryChange: (category: SettingCategory) => void;
 
 	$: categoryTabClasses = (c: SettingCategory) => {
-		const main = 'tab tab-lg tab-bordered flex-1';
+		const main = 'tab tab-lg tab-bordered flex-1 transition-all duration-300';
 		if (c !== category) return main;
 		return main + ' tab-active';
 	};

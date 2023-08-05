@@ -21,13 +21,13 @@
 			<input
 				id="pomodoro-duration"
 				type="number"
-				class="input input-bordered w-full max-w-xs"
+				class="input input-bordered w-full max-w-xs focus:input-primary transition-all duration-300"
 				min="1"
 				value={$pomodoro}
 				on:input={(e) => {
 					update((prev) => ({
 						...prev,
-						pomodoroDuration: Number((e.target)?.value) * MINUTE_TO_SECOND
+						pomodoroDuration: Number(e.target?.value) * MINUTE_TO_SECOND
 					}));
 				}}
 			/>
@@ -39,7 +39,7 @@
 			<input
 				id="short-break"
 				type="number"
-				class="input input-bordered w-full max-w-xs"
+				class="input input-bordered w-full max-w-xs focus:input-primary transition-all duration-300"
 				value={$shortBreak}
 				min="1"
 				on:input={(e) => {
@@ -57,7 +57,7 @@
 			<input
 				id="long-break"
 				type="number"
-				class="input input-bordered w-full max-w-xs"
+				class="input input-bordered w-full max-w-xs focus:input-primary transition-all duration-300"
 				value={$longBreak}
 				min="1"
 				on:input={(e) => {
@@ -109,7 +109,7 @@
 			id="longbreak_interval"
 			min="1"
 			type="number"
-			class="input input-bordered w-24"
+			class="input input-bordered w-24 focus:input-primary transition-all duration-300"
 			value={$store?.longBreakInterval ?? DefaultTimerSettings.longBreakInterval}
 			on:change={(e) => {
 				update((prev) => ({
