@@ -37,7 +37,6 @@
 				class={categoryTabClasses('NOTIFICATION')}
 				on:click={() => onCategoryChange('NOTIFICATION')}>Notification</button
 			>
-			<button class="tab tab-lg tab-bordered flex-1">Theme</button>
 		</div>
 		{#if category === 'TIMER'}
 			<TimerSettings store={timerSettingStore} />
@@ -48,7 +47,7 @@
 			<button class="btn" on:click={onClose}>Close</button>
 		</div>
 	</div>
-	<form method="dialog" class="modal-backdrop">
+	<form method="dialog" class="modal-backdrop bg-base-300 bg-opacity-40">
 		<button>close</button>
 	</form>
 </dialog>
