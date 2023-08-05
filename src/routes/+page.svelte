@@ -35,7 +35,7 @@
 <header>
 	<NavBar onSettingClick={() => (settingsOpen = true)} />
 </header>
-<main class=" mt-16">
+<main class="h-[calc(100vh-4rem)] flex">
 	<PomoTimer
 		pomoTimerStore={pomoTimer}
 		timerSettings={$timerSettings}
@@ -43,3 +43,5 @@
 		pomodoroCountStore={pomodoroCount}
 	/>
 </main>
+
+<style></style>
