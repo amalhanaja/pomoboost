@@ -10,7 +10,7 @@
 
 <section class="tabs tabs-boxed w-96 flex justify-between">
 	{#each timerTypes as t}
-		<button class={`tab ${t === selected ? 'tab-active' : ''}`} on:click={() => onSelect(t)}
+		<button class={`tab  ${t === selected ? 'tab-active text-primary-content' : ''}`} on:click={() => onSelect(t)}
 			>{readableTimerType(t)}</button
 		>
 	{/each}
