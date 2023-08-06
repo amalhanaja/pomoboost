@@ -11,6 +11,7 @@
 	import CountDown from './CountDown.svelte';
 	import TimerActions from './TimerActions.svelte';
 	import TimerTypeTabs from './TimerTypeTabs.svelte';
+	import { notify } from '$lib/utils/notification';
 	export let timerSettings: TimerSettingsModel;
 	export let notificationSettings: NotificationSettingsModel;
 	export let pomoTimerStore: Writable<PomoTimerModel>;
@@ -80,16 +81,13 @@
 	};
 
 	const finish = () => {
+		const current = get(pomoTimerStore).timerType;
+		notify(`${current} COMPLETED`)
 		playAudio(alarmClockShortAudio);
 		timerState = 'COMPLETED';
 		clearInterval(interval);
 		const nextTimerType = next();
 		const isNextRoundPomodoro = nextTimerType === 'POMODORO';
-		console.log(
-			isNextRoundPomodoro,
-			timerSettings.autoStartPomodoros,
-			timerSettings.autoStartBreaks
-		);
 		if (isNextRoundPomodoro && timerSettings.autoStartPomodoros) {
 			start();
 			return;
