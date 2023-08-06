@@ -42,7 +42,7 @@
 				type="checkbox"
 				class="toggle toggle-primary"
 				checked={isNotificationEnabled}
-				on:click={async () => {
+				on:click|preventDefault={async (e) => {
 					await requestPermission();
 					isNotificationEnabled = await isNotificationPermissionGranted();
 				}}
