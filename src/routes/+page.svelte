@@ -43,5 +43,3 @@
 		pomodoroCountStore={pomodoroCount}
 	/>
 </main>
-
-<style></style>
