@@ -31,6 +31,20 @@
 	onClose={() => (settingsOpen = false)}
 	category={settingCategory}
 	onCategoryChange={(c) => (settingCategory = c)}
+	onTimerSettingUpdated={(updated) => {
+		if ($pomoTimer.timerType === 'POMODORO' && updated.pomodoro) {
+			$pomoTimer.seconds = updated.pomodoro;
+			return;
+		}
+		if ($pomoTimer.timerType === 'SHORT_BREAK' && updated.shortBreak) {
+			$pomoTimer.seconds = updated.shortBreak;
+			return;
+		}
+		if ($pomoTimer.timerType === 'LONG_BREAK' && updated.longBreak) {
+			$pomoTimer.seconds = updated.longBreak;
+			return;
+		}
+	}}
 />
 <header>
 	<NavBar onSettingClick={() => (settingsOpen = true)} />

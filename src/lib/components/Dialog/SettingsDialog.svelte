@@ -13,6 +13,11 @@
 	export let onClose: () => void;
 	export let category: SettingCategory = 'TIMER';
 	export let onCategoryChange: (category: SettingCategory) => void;
+	export let onTimerSettingUpdated: (updated: {
+		pomodoro?: number;
+		shortBreak?: number;
+		longBreak?: number;
+	}) => void;
 
 	$: categoryTabClasses = (c: SettingCategory) => {
 		const main = 'tab tab-lg tab-bordered flex-1 transition-all duration-300';
@@ -39,7 +44,7 @@
 			>
 		</div>
 		{#if category === 'TIMER'}
-			<TimerSettings store={timerSettingStore} />
+			<TimerSettings store={timerSettingStore} onUpdate={onTimerSettingUpdated} />
 		{:else if category === 'NOTIFICATION'}
 			<NotificationSettings store={notificationSettingStore} />
 		{/if}

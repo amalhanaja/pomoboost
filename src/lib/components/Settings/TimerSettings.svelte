@@ -1,14 +1,38 @@
 <script lang="ts">
+	import type PomoTimerModel from '$lib/models/PomoTimerModel';
 	import type TimerSettingsModel from '$lib/models/TimerSettingsModel';
 	import { DefaultTimerSettings } from '$lib/models/TimerSettingsModel';
 	import { derived, type Writable } from 'svelte/store';
 	export let store: Writable<TimerSettingsModel>;
+	export let onUpdate: (updated: {
+		pomodoro?: number;
+		shortBreak?: number;
+		longBreak?: number;
+	}) => void;
 	const MINUTE_TO_SECOND = 60;
 	const { update } = store;
 	const getMinutes = (seconds: number) => Math.floor(seconds / MINUTE_TO_SECOND);
 	$: pomodoro = derived(store, ($settings) => getMinutes($settings?.pomodoroDuration ?? 0));
 	$: shortBreak = derived(store, ($settings) => getMinutes($settings?.shortBreakDuration ?? 0));
 	$: longBreak = derived(store, ($settings) => getMinutes($settings?.longBreakDuration ?? 0));
+	const updateSettings = (updater: (prev: TimerSettingsModel) => TimerSettingsModel) => {
+		update((prev) => {
+			const updated = updater(prev);
+			onUpdate({
+				pomodoro:
+					prev.pomodoroDuration !== updated.pomodoroDuration ? updated.pomodoroDuration : undefined,
+				shortBreak:
+					prev.shortBreakDuration !== updated.shortBreakDuration
+						? updated.shortBreakDuration
+						: undefined,
+				longBreak:
+					prev.longBreakDuration !== updated.longBreakDuration
+						? updated.longBreakDuration
+						: undefined
+			});
+			return updated;
+		});
+	};
 </script>
 
 <section class="flex flex-col space-y-2">
@@ -25,7 +49,7 @@
 				min="1"
 				value={$pomodoro}
 				on:input={(e) => {
-					update((prev) => ({
+					updateSettings((prev) => ({
 						...prev,
 						pomodoroDuration: Number(e.target?.value) * MINUTE_TO_SECOND
 					}));
@@ -43,7 +67,7 @@
 				value={$shortBreak}
 				min="1"
 				on:input={(e) => {
-					update((prev) => ({
+					updateSettings((prev) => ({
 						...prev,
 						shortBreakDuration: Number(e.target?.value) * MINUTE_TO_SECOND
 					}));
@@ -61,7 +85,7 @@
 				value={$longBreak}
 				min="1"
 				on:input={(e) => {
-					update((prev) => ({
+					updateSettings((prev) => ({
 						...prev,
 						longBreakDuration: Number(e.target?.value) * MINUTE_TO_SECOND
 					}));
@@ -78,7 +102,7 @@
 				class="toggle toggle-primary"
 				checked={$store?.autoStartBreaks ?? DefaultTimerSettings.autoStartBreaks}
 				on:click={() => {
-					update((prev) => ({
+					updateSettings((prev) => ({
 						...prev,
 						autoStartBreaks: !prev.autoStartBreaks
 					}));
@@ -95,7 +119,7 @@
 				class="toggle toggle-primary"
 				checked={$store?.autoStartPomodoros ?? DefaultTimerSettings.autoStartPomodoros}
 				on:click={() => {
-					update((prev) => ({
+					updateSettings((prev) => ({
 						...prev,
 						autoStartPomodoros: !prev.autoStartPomodoros
 					}));
@@ -112,7 +136,7 @@
 			class="input input-bordered w-24 focus:input-primary transition-all duration-300"
 			value={$store?.longBreakInterval ?? DefaultTimerSettings.longBreakInterval}
 			on:change={(e) => {
-				update((prev) => ({
+				updateSettings((prev) => ({
 					...prev,
 					longBreakInterval: Number(e.target?.value)
 				}));
