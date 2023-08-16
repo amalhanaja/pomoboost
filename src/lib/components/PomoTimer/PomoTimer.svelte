@@ -21,7 +21,7 @@
 	let timerState: TimerState = 'STOPPED';
 	$: minutes = Math.floor(($pomoTimerStore?.seconds ?? 0) / 60);
 	$: seconds = ($pomoTimerStore?.seconds ?? 0) - minutes * 60;
-	$: count = $pomodoroCountStore?.get($pomoTimerStore?.timerType) ?? 0;
+	$: count = $pomodoroCountStore?.get($pomoTimerStore?.timerType) ?? 1;
 	$: headerTitle =
 		timerState === 'RUNNING'
 			? `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} – PomoBoost`
