@@ -21,29 +21,45 @@
 	const pomodoroCount = pomodoroCountStore(pomodoroCountRepository);
 	const notificationSettings = notificationSettingsStore(notificationSettingsRepository);
 	let settingsOpen = false;
+	let allowUpdateTimerSetting = true;
 	let settingCategory: SettingCategory = 'TIMER';
 </script>
 
 <SettingsDialog
 	open={settingsOpen}
-	timerSettingStore={timerSettings}
-	notificationSettingStore={notificationSettings}
+	timerSettings={$timerSettings}
+	notificationSettings={$notificationSettings}
 	onClose={() => (settingsOpen = false)}
 	category={settingCategory}
 	onCategoryChange={(c) => (settingCategory = c)}
 	onTimerSettingUpdated={(updated) => {
-		if ($pomoTimer.timerType === 'POMODORO' && updated.pomodoro) {
-			$pomoTimer.seconds = updated.pomodoro;
-			return;
-		}
-		if ($pomoTimer.timerType === 'SHORT_BREAK' && updated.shortBreak) {
-			$pomoTimer.seconds = updated.shortBreak;
-			return;
-		}
-		if ($pomoTimer.timerType === 'LONG_BREAK' && updated.longBreak) {
-			$pomoTimer.seconds = updated.longBreak;
-			return;
-		}
+		const { update } = timerSettings;
+		update((prev) => {
+			switch (true) {
+				case prev.pomodoroDuration !== updated.pomodoroDuration &&
+					$pomoTimer.timerType === 'POMODORO':
+					const pomodoro = updated.pomodoroDuration - (prev.pomodoroDuration - $pomoTimer.seconds);
+					$pomoTimer.seconds = pomodoro >= 0 ? pomodoro : updated.pomodoroDuration;
+					break;
+				case prev.shortBreakDuration !== updated.shortBreakDuration &&
+					$pomoTimer.timerType === 'SHORT_BREAK':
+					const shortBreak =
+						updated.shortBreakDuration - (prev.shortBreakDuration - $pomoTimer.seconds);
+					$pomoTimer.seconds = shortBreak >= 0 ? shortBreak : updated.shortBreakDuration;
+					break;
+				case prev.longBreakDuration !== updated.longBreakDuration &&
+					$pomoTimer.timerType === 'LONG_BREAK':
+					const longBreak =
+						updated.longBreakDuration - (prev.longBreakDuration - $pomoTimer.seconds);
+					$pomoTimer.seconds = longBreak >= 0 ? longBreak : updated.longBreakDuration;
+					break;
+			}
+			return updated;
+		});
+	}}
+	onNotificationSettingUpdated={(updated) => {
+		const { update } = notificationSettings;
+		update(() => updated);
 	}}
 />
 <header>
@@ -55,5 +71,8 @@
 		timerSettings={$timerSettings}
 		notificationSettings={$notificationSettings}
 		pomodoroCountStore={pomodoroCount}
+		onStateChanged={(state) => {
+			allowUpdateTimerSetting = state !== 'RUNNING';
+		}}
 	/>
 </main>

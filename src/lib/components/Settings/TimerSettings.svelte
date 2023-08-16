@@ -1,11 +1,7 @@
 <script lang="ts">
 	import type TimerSettingsModel from '$lib/models/TimerSettingsModel';
-		export let timerSettings: TimerSettingsModel;
-	export let onUpdate: (updated: {
-		pomodoro?: number;
-		shortBreak?: number;
-		longBreak?: number;
-	}) => void;
+	export let timerSettings: TimerSettingsModel;
+	export let onUpdate: (updated: TimerSettingsModel) => void;
 	const MINUTE_TO_SECOND = 60;
 	const getMinutes = (seconds: number) => Math.floor(seconds / MINUTE_TO_SECOND);
 	$: pomodoro = getMinutes(timerSettings?.pomodoroDuration ?? 0);
@@ -13,20 +9,7 @@
 	$: longBreak = getMinutes(timerSettings?.longBreakDuration ?? 0);
 	const updateSettings = (updater: (prev: TimerSettingsModel) => TimerSettingsModel) => {
 		const updated = updater(timerSettings);
-		onUpdate({
-			pomodoro:
-				timerSettings.pomodoroDuration !== updated.pomodoroDuration
-					? updated.pomodoroDuration
-					: undefined,
-			shortBreak:
-				timerSettings.shortBreakDuration !== updated.shortBreakDuration
-					? updated.shortBreakDuration
-					: undefined,
-			longBreak:
-				timerSettings.longBreakDuration !== updated.longBreakDuration
-					? updated.longBreakDuration
-					: undefined
-		});
+		onUpdate(updated);
 	};
 </script>
 
@@ -42,13 +25,13 @@
 				type="number"
 				class="input input-bordered w-full max-w-xs focus:input-primary transition-all duration-300"
 				min="1"
-				value={pomodoro}
 				on:input={(e) => {
 					updateSettings((prev) => ({
 						...prev,
 						pomodoroDuration: Number(e.currentTarget?.value) * MINUTE_TO_SECOND
 					}));
 				}}
+				bind:value={pomodoro}
 			/>
 		</div>
 		<div class="form-control w-full max-w-xs">
@@ -59,14 +42,14 @@
 				id="short-break"
 				type="number"
 				class="input input-bordered w-full max-w-xs focus:input-primary transition-all duration-300"
-				value={shortBreak}
 				min="1"
-				on:input={(e) => {
+				on:input|preventDefault={(e) => {
 					updateSettings((prev) => ({
 						...prev,
 						shortBreakDuration: Number(e.currentTarget?.value) * MINUTE_TO_SECOND
 					}));
 				}}
+				bind:value={shortBreak}
 			/>
 		</div>
 		<div class="form-control w-full max-w-xs">
@@ -77,14 +60,14 @@
 				id="long-break"
 				type="number"
 				class="input input-bordered w-full max-w-xs focus:input-primary transition-all duration-300"
-				value={longBreak}
 				min="1"
-				on:input={(e) => {
+				on:input|preventDefault={(e) => {
 					updateSettings((prev) => ({
 						...prev,
 						longBreakDuration: Number(e.currentTarget?.value) * MINUTE_TO_SECOND
 					}));
 				}}
+				bind:value={longBreak}
 			/>
 		</div>
 	</section>

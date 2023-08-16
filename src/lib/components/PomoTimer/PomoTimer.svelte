@@ -16,6 +16,7 @@
 	export let notificationSettings: NotificationSettingsModel;
 	export let pomoTimerStore: Writable<PomoTimerModel>;
 	export let pomodoroCountStore: Writable<Map<TimerType, number>>;
+	export let onStateChanged: (newState: TimerState) => void;
 	const LONG_BREAK_INTERVAL = 3;
 	let timerState: TimerState = 'STOPPED';
 	$: minutes = Math.floor(($pomoTimerStore?.seconds ?? 0) / 60);
@@ -29,6 +30,11 @@
 
 	const changeTimerType = (timerType: TimerType) => {
 		pomoTimerStore.update((prev) => ({ ...prev, timerType: timerType }));
+	};
+
+	const changeTimerState = (newState: TimerState) => {
+		timerState = newState;
+		onStateChanged(newState);
 	};
 
 	const onTick = () => {
@@ -55,12 +61,12 @@
 
 	const start = () => {
 		playAudio(pingAudio);
-		timerState = 'RUNNING';
+		changeTimerState('RUNNING');
 		interval = setInterval(onTick, 1000);
 	};
 
 	const stop = () => {
-		timerState = 'STOPPED';
+		changeTimerState('STOPPED');
 		clearInterval(interval);
 	};
 
@@ -82,9 +88,9 @@
 
 	const finish = () => {
 		const current = get(pomoTimerStore).timerType;
-		notify(`${current} COMPLETED`)
+		notify(`${current} COMPLETED`);
 		playAudio(alarmClockShortAudio);
-		timerState = 'COMPLETED';
+		changeTimerState('COMPLETED');
 		clearInterval(interval);
 		const nextTimerType = next();
 		const isNextRoundPomodoro = nextTimerType === 'POMODORO';

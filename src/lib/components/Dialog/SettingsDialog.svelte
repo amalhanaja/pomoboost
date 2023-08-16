@@ -1,23 +1,20 @@
 <script lang="ts">
-	import type { Writable } from 'svelte/store';
-	import TimerSettings from '../Settings/TimerSettings.svelte';
+	import type NotificationSettingsModel from '$lib/models/NotificationSettingsModel';
+	import type SettingCategory from '$lib/models/SettingCategory';
 	import type TimerSettingsModel from '$lib/models/TimerSettingsModel';
 	import { onMount } from 'svelte';
-	import type SettingCategory from '$lib/models/SettingCategory';
+	import type { Writable } from 'svelte/store';
+	import TimerSettings from '../Settings/TimerSettings.svelte';
 	import NotificationSettings from '../Settings/NotificationSettings.svelte';
-	import type NotificationSettingsModel from '$lib/models/NotificationSettingsModel';
 
 	export let open: boolean;
-	export let timerSettingStore: Writable<TimerSettingsModel>;
-	export let notificationSettingStore: Writable<NotificationSettingsModel>;
+	export let timerSettings: TimerSettingsModel;
+	export let notificationSettings: NotificationSettingsModel;
 	export let onClose: () => void;
 	export let category: SettingCategory = 'TIMER';
 	export let onCategoryChange: (category: SettingCategory) => void;
-	export let onTimerSettingUpdated: (updated: {
-		pomodoro?: number;
-		shortBreak?: number;
-		longBreak?: number;
-	}) => void;
+	export let onTimerSettingUpdated: (updated: TimerSettingsModel) => void;
+	export let onNotificationSettingUpdated: (updated: NotificationSettingsModel) => void;
 
 	$: categoryTabClasses = (c: SettingCategory) => {
 		const main = 'tab tab-lg tab-bordered flex-1 transition-all duration-300';
@@ -44,9 +41,12 @@
 			>
 		</div>
 		{#if category === 'TIMER'}
-			<TimerSettings timerSettings={$timerSettingStore} onUpdate={onTimerSettingUpdated} />
+			<TimerSettings {timerSettings} onUpdate={onTimerSettingUpdated} />
 		{:else if category === 'NOTIFICATION'}
-			<NotificationSettings store={notificationSettingStore} />
+			<NotificationSettings
+				settings={notificationSettings}
+				onUpdate={onNotificationSettingUpdated}
+			/>
 		{/if}
 		<div class="modal-action">
 			<button class="btn" on:click={onClose}>Close</button>

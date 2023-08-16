@@ -1,19 +1,25 @@
 <script lang="ts">
 	import type NotificationSettingsModel from '$lib/models/NotificationSettingsModel';
-	import {
-		isNotificationPermissionGranted,
-		notify,
-		requestPermission
-	} from '$lib/utils/notification';
+	import { isNotificationPermissionGranted, requestPermission } from '$lib/utils/notification';
 	import { onMount } from 'svelte';
-	import type { Writable } from 'svelte/store';
 
-	export let store: Writable<NotificationSettingsModel>;
-
+	export let settings: NotificationSettingsModel;
+	export let onUpdate: (updated: NotificationSettingsModel) => void;
 	const PERCENTAGE = 100;
-	$: volume = Math.floor($store.volume * PERCENTAGE);
-	const updateVolume = (v: number) => ($store.volume = v / PERCENTAGE);
+	const updateSettings = (
+		updater: (prev: NotificationSettingsModel) => NotificationSettingsModel
+	) => {
+		const updated = updater(settings);
+		onUpdate(updated);
+	};
+	const updateVolume = (v: number) => {
+		updateSettings((prev) => ({ ...prev, volume: v / PERCENTAGE }));
+		console.log("update value")
+	};
+
+	$: volume = Math.floor(settings.volume * PERCENTAGE);
 	let isNotificationEnabled = false;
+
 	onMount(async () => {
 		isNotificationEnabled = await isNotificationPermissionGranted();
 	});
@@ -28,10 +34,10 @@
 			type="range"
 			min="0"
 			max="100"
-			value={volume}
 			class="flex-1 range range-xs"
 			step="1"
-			on:change={(e) => updateVolume(Number(e.target?.value))}
+			on:input={(e) => updateVolume(Number(e.currentTarget?.value))}
+			bind:value={volume}
 		/>
 	</div>
 	<div class="form-control">
