@@ -128,7 +128,7 @@
 		</label>
 	</div>
 	<div class="form-control flex flex-row justify-between">
-		<label for="" class="font-semibold label-text label">Auto start podomoros</label>
+		<label for="" class="font-semibold label-text label">Long break interval</label>
 		<input
 			id="longbreak_interval"
 			min="1"
