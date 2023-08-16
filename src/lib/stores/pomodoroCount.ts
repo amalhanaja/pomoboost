@@ -8,29 +8,36 @@ const pomodoroCountStore = (
 ): Writable<Map<TimerType, number>> => {
 	const store = writable(new Map<TimerType, number>());
 	const { subscribe, set } = store;
-	const storeValue = (value: Map<TimerType, number>) => {
-		console.log(value);
-		value.forEach((v, k) => repository.setCount(k, v));
-		set(value);
+	const storeValue = async (value: Map<TimerType, number>, prev?: Map<TimerType, number>) => {
+		console.log(value, prev);
+		value.forEach(async (v, k) => {
+			if (v !== prev?.get(k)) {
+				await repository.saveCount(k);
+				set(value);
+			}
+		});
 	};
-	onMount(() => {
+	onMount(async () => {
+		const pomodoro = await repository.getAggregateCount('POMODORO');
+		const shortBreak = await repository.getAggregateCount('SHORT_BREAK');
+		const longBreak = await repository.getAggregateCount('LONG_BREAK');
 		set(
 			new Map([
-				['POMODORO', repository.getCount('POMODORO')],
-				['SHORT_BREAK', repository.getCount('SHORT_BREAK')],
-				['LONG_BREAK', repository.getCount('LONG_BREAK')]
+				['POMODORO', pomodoro],
+				['SHORT_BREAK', shortBreak],
+				['LONG_BREAK', longBreak]
 			])
 		);
 	});
 	return {
 		subscribe,
-		set(value) {
-			storeValue(value);
+		set() {
+			console.log('cannot set value directly');
 		},
 		update(updater) {
 			const stored = get(store);
-			const updated = updater(stored);
-			storeValue(updated);
+			const updated = updater(new Map(stored));
+			storeValue(updated, stored);
 		}
 	};
 };
