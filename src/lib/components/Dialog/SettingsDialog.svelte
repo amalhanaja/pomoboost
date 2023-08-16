@@ -44,7 +44,7 @@
 			>
 		</div>
 		{#if category === 'TIMER'}
-			<TimerSettings store={timerSettingStore} onUpdate={onTimerSettingUpdated} />
+			<TimerSettings timerSettings={$timerSettingStore} onUpdate={onTimerSettingUpdated} />
 		{:else if category === 'NOTIFICATION'}
 			<NotificationSettings store={notificationSettingStore} />
 		{/if}
