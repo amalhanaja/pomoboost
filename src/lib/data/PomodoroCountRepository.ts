@@ -53,12 +53,13 @@ export class PomodoroCountRepositoryImpl implements PomodoroCountRepository {
 			storeName: this.storeName,
 			obj: model
 		});
-		console.log("Saved")
-		// this.idb.version;
 	}
 	async getAggregateCount(timerType: TimerType): Promise<number> {
 		const trx = await this.transaction();
 		const all = await this.indexedDb.findAll<CounterModel>(trx, { storeName: this.storeName });
+		if (all.length <= 0) {
+			return this.DEFAULT_COUNT;
+		}
 		const count = all
 			.map((value) => this.getCountFromModel(timerType, value))
 			.reduce((acc, curr) => acc + curr);
