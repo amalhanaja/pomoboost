@@ -10,8 +10,7 @@ export default interface PomodoroCountRepository {
 }
 
 export class PomodoroCountRepositoryImpl implements PomodoroCountRepository {
-	private PREFIX_KEY = 'COUNT_';
-	private DEFAULT_COUNT = '0';
+	private DEFAULT_COUNT = 1;
 	private indexedDb: IndexedDB;
 	private storeName: string = ObjectStores.COUNTER;
 
@@ -30,9 +29,9 @@ export class PomodoroCountRepositoryImpl implements PomodoroCountRepository {
 			storeName: this.storeName,
 			query: now
 		});
-		let pomodoro = stored?.pomodoro ?? 0;
-		let shortBreak = stored?.shortBreak ?? 0;
-		let longBreak = stored?.longBreak ?? 0;
+		let pomodoro = stored?.pomodoro ?? this.DEFAULT_COUNT;
+		let shortBreak = stored?.shortBreak ?? this.DEFAULT_COUNT;
+		let longBreak = stored?.longBreak ?? this.DEFAULT_COUNT;
 		switch (timerType) {
 			case 'POMODORO':
 				pomodoro++;
