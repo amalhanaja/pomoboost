@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type TimerSettingsModel from '$lib/models/TimerSettingsModel';
-	import { DefaultTimerSettings } from '$lib/models/TimerSettingsModel';
-	export let timerSettings: TimerSettingsModel;
+		export let timerSettings: TimerSettingsModel;
 	export let onUpdate: (updated: {
 		pomodoro?: number;
 		shortBreak?: number;
