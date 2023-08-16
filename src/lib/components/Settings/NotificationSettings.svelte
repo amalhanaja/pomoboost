@@ -14,7 +14,6 @@
 	};
 	const updateVolume = (v: number) => {
 		updateSettings((prev) => ({ ...prev, volume: v / PERCENTAGE }));
-		console.log("update value")
 	};
 
 	$: volume = Math.floor(settings.volume * PERCENTAGE);
