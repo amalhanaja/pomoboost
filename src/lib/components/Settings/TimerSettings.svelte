@@ -1,12 +1,13 @@
 <script lang="ts">
 	import type TimerSettingsModel from '$lib/models/TimerSettingsModel';
-	export let timerSettings: TimerSettingsModel;
+	import { DefaultTimerSettings } from '$lib/models/TimerSettingsModel';
+	export let timerSettings: TimerSettingsModel = DefaultTimerSettings;
 	export let onUpdate: (updated: TimerSettingsModel) => void;
 	const MINUTE_TO_SECOND = 60;
 	const getMinutes = (seconds: number) => Math.floor(seconds / MINUTE_TO_SECOND);
-	$: pomodoro = getMinutes(timerSettings?.pomodoroDuration ?? 0);
-	$: shortBreak = getMinutes(timerSettings?.shortBreakDuration ?? 0);
-	$: longBreak = getMinutes(timerSettings?.longBreakDuration ?? 0);
+	$: pomodoro = getMinutes(timerSettings.pomodoroDuration);
+	$: shortBreak = getMinutes(timerSettings.shortBreakDuration);
+	$: longBreak = getMinutes(timerSettings.longBreakDuration);
 	const updateSettings = (updater: (prev: TimerSettingsModel) => TimerSettingsModel) => {
 		const updated = updater(timerSettings);
 		onUpdate(updated);
@@ -78,7 +79,7 @@
 				id="autostart_breaks"
 				type="checkbox"
 				class="toggle toggle-primary"
-				checked={timerSettings?.autoStartBreaks}
+				bind:checked={timerSettings.autoStartBreaks}
 				on:click={() => {
 					updateSettings((prev) => ({
 						...prev,
@@ -95,7 +96,7 @@
 				id="autostart_pomodoros"
 				type="checkbox"
 				class="toggle toggle-primary"
-				checked={timerSettings?.autoStartPomodoros}
+				bind:checked={timerSettings.autoStartPomodoros}
 				on:click={() => {
 					updateSettings((prev) => ({
 						...prev,
@@ -112,13 +113,13 @@
 			min="1"
 			type="number"
 			class="input input-bordered w-24 focus:input-primary transition-all duration-300"
-			value={timerSettings?.longBreakInterval}
 			on:change={(e) => {
 				updateSettings((prev) => ({
 					...prev,
 					longBreakInterval: Number(e.currentTarget?.value)
 				}));
 			}}
+			bind:value={timerSettings.longBreakInterval}
 		/>
 	</div>
 </section>
