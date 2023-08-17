@@ -11,17 +11,17 @@
 </script>
 
 <section class="flex flex-row justify-center gap-x-4">
-	<button class="btn btn-square btn-outline" on:click={onClickReset}>
+	<button class="btn btn-square btn-outline" on:click={onClickReset} aria-label="Reset">
 		<IcRoteateLeft />
 	</button>
-	<button class="btn btn-primary w-24" on:click={onClickMainControl}>
+	<button class="btn btn-primary w-24" on:click={onClickMainControl} aria-label="play pause">
 		{#if isRunning}
 			<IcPause />
 		{:else}
 			<IcPlay />
 		{/if}
 	</button>
-	<button class="btn btn-square btn-outline" on:click={onClickSkip}>
+	<button class="btn btn-square btn-outline" on:click={onClickSkip} aria-label="skip">
 		<IcForwardStep />
 	</button>
 </section>

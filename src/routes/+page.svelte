@@ -21,9 +21,15 @@
 	const pomodoroCount = pomodoroCountStore(pomodoroCountRepository);
 	const notificationSettings = notificationSettingsStore(notificationSettingsRepository);
 	let settingsOpen = false;
-	let allowUpdateTimerSetting = true;
 	let settingCategory: SettingCategory = 'TIMER';
 </script>
+
+<svelte:head>
+	<meta
+		name="description"
+		content="Pomoboost: The simple and effective way to stay focused and productive."
+	/>
+</svelte:head>
 
 <SettingsDialog
 	open={settingsOpen}

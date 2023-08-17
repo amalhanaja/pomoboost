@@ -54,7 +54,7 @@
 			/>
 		</div>
 		<div class="form-control w-full max-w-xs">
-			<label class="label" for="long-brak">
+			<label class="label" for="long-break">
 				<span class="label-text">Long Break</span>
 			</label>
 			<input
@@ -107,7 +107,7 @@
 		</label>
 	</div>
 	<div class="form-control flex flex-row justify-between">
-		<label for="" class="font-semibold label-text label">Long break interval</label>
+		<label for="longbreak_interval" class="font-semibold label-text label">Long break interval</label>
 		<input
 			id="longbreak_interval"
 			min="1"

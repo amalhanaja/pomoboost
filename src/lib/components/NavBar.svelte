@@ -11,6 +11,7 @@
 		<button
 			class="btn btn-square text-primary-content btn-ghost"
 			on:click|preventDefault={onSettingClick}
+			aria-label="Settings"
 		>
 			<IcSetting />
 		</button>
