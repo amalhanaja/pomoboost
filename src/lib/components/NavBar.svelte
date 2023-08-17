@@ -5,7 +5,9 @@
 
 <nav class="navbar bg-primary">
 	<div class="text-primary-content flex-1">
-		<a class="btn btn-ghost normal-case text-xl" href="/">PomoBoost</a>
+		<a class="btn btn-ghost normal-case text-xl" href="/"
+			><img class=" w-8 h-8" src="/app_icon.svg" alt="PomoBoost" />PomoBoost</a
+		>
 	</div>
 	<div class="flex-none">
 		<button
