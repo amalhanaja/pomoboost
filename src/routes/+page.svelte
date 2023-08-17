@@ -65,7 +65,7 @@
 <header>
 	<NavBar onSettingClick={() => (settingsOpen = true)} />
 </header>
-<main class="h-[calc(100vh-4rem)] flex">
+<main class="h-[calc(100vh-4rem)] flex w-full">
 	<PomoTimer
 		pomoTimerStore={pomoTimer}
 		timerSettings={$timerSettings}

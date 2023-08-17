@@ -131,7 +131,7 @@
 <svelte:head>
 	<title>{headerTitle}</title>
 </svelte:head>
-<section class="flex flex-col gap-y-8 w-96 m-auto">
+<section class="flex flex-col w-full sm:w-96 mx-4 gap-y-8 m-auto sm:m-auto">
 	<TimerTypeTabs selected={$pomoTimerStore?.timerType ?? 'POMODORO'} onSelect={changeTimerType} />
 	<CountDown {seconds} {minutes} {count} />
 	<TimerActions

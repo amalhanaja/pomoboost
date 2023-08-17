@@ -8,9 +8,9 @@
 	};
 </script>
 
-<section class="tabs tabs-boxed w-96 flex justify-between">
+<section class="tabs tabs-boxed w-full flex justify-between flex-nowrap">
 	{#each timerTypes as t}
-		<button class={`tab  ${t === selected ? 'tab-active text-primary-content' : ''}`} on:click={() => onSelect(t)}
+		<button class={`tab overflow-hidden ${t === selected ? 'tab-active text-primary-content' : ''}`} on:click={() => onSelect(t)}
 			>{readableTimerType(t)}</button
 		>
 	{/each}
