@@ -27,7 +27,7 @@
 <svelte:head>
 	<meta
 		name="description"
-		content="Pomoboost: The simple and effective way to stay focused and productive."
+		content="Pomodoro Timer: The simple and effective way to stay focused and productive."
 	/>
 </svelte:head>
 
@@ -77,8 +77,5 @@
 		timerSettings={$timerSettings}
 		notificationSettings={$notificationSettings}
 		pomodoroCountStore={pomodoroCount}
-		onStateChanged={(state) => {
-			allowUpdateTimerSetting = state !== 'RUNNING';
-		}}
 	/>
 </main>
