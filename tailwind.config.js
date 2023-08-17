@@ -10,11 +10,10 @@ export default {
 			'winter',
 			'night',
 			{
-				darkTheme: {
+				lightTheme: {
 					primary: '#FFC056',
 					secondary: '#B8F3FF',
 					accent: '#09C2FF',
-					base: '#ffffff',
 					'base-100': '#f5f5f4',
 					info: '#52b8da',
 					success: '#50d38f',
@@ -23,6 +22,6 @@ export default {
 				}
 			}
 		],
-		darkTheme: 'darkTheme'
+		darkTheme: 'lightTheme'
 	}
 };
