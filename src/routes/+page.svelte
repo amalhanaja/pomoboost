@@ -27,7 +27,7 @@
 <svelte:head>
 	<meta
 		name="description"
-		content="Pomodoro Timer: The simple and effective way to stay focused and productive."
+		content="PomoBoost: The simple and effective way to stay focused and productive."
 	/>
 </svelte:head>
 
