@@ -8,7 +8,7 @@
 	};
 </script>
 
-<section class="tabs tabs-boxed w-full flex justify-between flex-nowrap bg-white shadow-sm">
+<section class="tabs tabs-boxed w-full flex justify-between flex-nowrap bg-white dark:bg-stone-900 shadow-sm">
 	{#each timerTypes as t}
 		<button
 			class={`tab overflow-hidden font-semibold text-neutral text-opacity-75 ${

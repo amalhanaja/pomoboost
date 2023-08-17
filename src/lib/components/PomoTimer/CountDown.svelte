@@ -4,7 +4,7 @@
 	export let count: number;
 </script>
 
-<section class="card w-full py-10 bg-white shadow-sm">
+<section class="card w-full py-10 bg-white dark:bg-stone-900 shadow-sm">
 	<div class="card-body items-center text-center">
 		<div class="countdown font-bold font-mono text-6xl text-primary">
 			<span style={`--value: ${minutes}`} />:
