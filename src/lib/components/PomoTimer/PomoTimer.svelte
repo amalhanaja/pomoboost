@@ -25,7 +25,7 @@
 		timerState === 'RUNNING'
 			? `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} – PomoBoost`
 			: 'PomoBoost';
-	let interval: NodeJS.Timer | undefined = undefined;
+	let interval: NodeJS.Timeout | null = null;
 
 	const changeTimerType = (timerType: TimerType) => {
 		pomoTimerStore.update((prev) => ({ ...prev, timerType: timerType }));
@@ -65,6 +65,7 @@
 
 	const stop = () => {
 		changeTimerState('STOPPED');
+		if (!interval) return;
 		clearInterval(interval);
 	};
 
@@ -89,7 +90,9 @@
 		notify(`${current} COMPLETED`);
 		playAudio(alarmClockShortAudio);
 		changeTimerState('COMPLETED');
-		clearInterval(interval);
+		if (interval) {
+			clearInterval(interval);
+		}
 		const nextTimerType = next();
 		const isNextRoundPomodoro = nextTimerType === 'POMODORO';
 		if (isNextRoundPomodoro && timerSettings.autoStartPomodoros) {
