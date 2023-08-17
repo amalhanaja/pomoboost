@@ -16,7 +16,6 @@
 	export let notificationSettings: NotificationSettingsModel;
 	export let pomoTimerStore: Writable<PomoTimerModel>;
 	export let pomodoroCountStore: Writable<Map<TimerType, number>>;
-	export let onStateChanged: (newState: TimerState) => void;
 	const LONG_BREAK_INTERVAL = 3;
 	let timerState: TimerState = 'STOPPED';
 	$: minutes = Math.floor(($pomoTimerStore?.seconds ?? 0) / 60);
@@ -34,7 +33,6 @@
 
 	const changeTimerState = (newState: TimerState) => {
 		timerState = newState;
-		onStateChanged(newState);
 	};
 
 	const onTick = () => {
