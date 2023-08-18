@@ -11,7 +11,7 @@
 <section class="tabs tabs-boxed w-full flex justify-between flex-nowrap bg-white dark:bg-stone-900 shadow-sm">
 	{#each timerTypes as t}
 		<button
-			class={`tab overflow-hidden font-semibold text-neutral text-opacity-75 ${
+			class={`tab overflow-hidden font-semibold text-neutral text-opacity-75 transition-all duration-200 ease-out ${
 				t === selected ? 'tab-active text-primary-content' : ''
 			}`}
 			on:click={() => onSelect(t)}>{readableTimerType(t)}</button
